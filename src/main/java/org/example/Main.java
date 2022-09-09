@@ -9,20 +9,13 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
-    private final String PATH_TO_DICTIONARY_LATIN;
-    private final String PATH_TO_DICTIONARY_NUMBER;
+    private static final String PATH_TO_DICTIONARY_LATIN = "target\\classes\\dictionaryLatin.txt";
+    private static final String PATH_TO_DICTIONARY_NUMBER = "target\\classes\\dictionaryNumber.txt";
 
     private DictionaryLatin dictionaryLatin;
     private DictionaryNumber dictionaryNumber;
 
     {
-        try {
-            PATH_TO_DICTIONARY_LATIN = "target\\classes\\dictionaryLatin.txt";
-            PATH_TO_DICTIONARY_NUMBER = "target\\classes\\dictionaryNumber.txt";
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
         try {
             dictionaryLatin = new DictionaryLatin(PATH_TO_DICTIONARY_LATIN);
         } catch (FileNotFoundException e) {
@@ -67,10 +60,7 @@ public class Main {
                 actionNumber = scan.nextInt();
             } catch (InputMismatchException e){
                 System.out.println("Это не номер действия!");
-                continue;
-            }
-            if (actionNumber < 1 || actionNumber > 4){
-                System.out.println("Это не номер действия!");
+                scan.next();
                 continue;
             }
 
@@ -87,11 +77,13 @@ public class Main {
                 case 4:
                     dictionaries.deleteByKey(dictionaries.choiceDictionary());
                     break;
+                default:
+                    System.out.println("Это не номер действия!");
             }
         }
     }
 
-    private void printDictionaries(){
+    public void printDictionaries(){
         System.out.println("Содержимое первого словаря:");
         dictionaryLatin.printToConsole();
         System.out.println();
@@ -102,7 +94,7 @@ public class Main {
     }
 
     //Возвращает словарь выбранный пользователем
-    private Dictionary choiceDictionary(){
+    public Dictionary choiceDictionary() {
         Scanner scan = new Scanner(System.in);
         while (true){
             System.out.println(
@@ -111,27 +103,26 @@ public class Main {
                             "2 - числовой словарь\n" +
                             "Введите номер словаря:"
             );
-            int numberDictionary = 0;
-            try {
-                numberDictionary = scan.nextInt();
-                if (numberDictionary != 1 && numberDictionary != 2){
+            if (scan.hasNextInt()){
+                int numberDictionary = scan.nextInt();
+
+                if (numberDictionary == 1){
+                    return dictionaryLatin;
+                } else if (numberDictionary == 2){
+                    return dictionaryNumber;
+                } else {
                     System.out.println("Это не номер словаря!!!");
                     continue;
                 }
-            } catch (InputMismatchException e){
+            } else {
                 System.out.println("Это не номер словаря!!!");
+                scan.next();
                 continue;
-            }
-
-            if (numberDictionary == 1){
-                return dictionaryLatin;
-            } else if (numberDictionary == 2){
-                return dictionaryNumber;
             }
         }
     }
 
-    private void findByKey(Dictionary dictionary){
+    public void findByKey(Dictionary dictionary){
         Scanner scan = new Scanner(System.in);
         System.out.println("Введите ключ слово:");
         String key = scan.nextLine();
@@ -144,7 +135,7 @@ public class Main {
 
     }
 
-    private void putWord(Dictionary dictionary){
+    public void putWord(Dictionary dictionary){
         Scanner scan = new Scanner(System.in);
         System.out.println("Введите ключ слово:");
         String key = scan.nextLine();
@@ -159,7 +150,7 @@ public class Main {
         }
     }
 
-    private void deleteByKey(Dictionary dictionary){
+    public void deleteByKey(Dictionary dictionary){
         Scanner scan = new Scanner(System.in);
         System.out.println("Введите ключ слово:");
         String key = scan.nextLine();
@@ -170,11 +161,5 @@ public class Main {
         } catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
-    }
-
-    public String getPathToResource(String filename) throws Exception {
-        URL uri = getClass().getResource("");
-        System.out.println(uri);
-        return uri.toString();
     }
 }

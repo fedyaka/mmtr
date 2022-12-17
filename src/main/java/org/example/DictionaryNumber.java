@@ -29,7 +29,7 @@ public class DictionaryNumber extends Dictionary<String, String>{
     private Integer checkEntryRules(String wordTested) throws IllegalArgumentException{
         Integer intWordTested = stringToInteger(wordTested);
 
-        if (intWordTested < 100000 && intWordTested > -1){
+        if (intWordTested < 100000 && intWordTested >= 10000){
             return intWordTested;
         }
         throw new IllegalArgumentException("Введи число по правилам, будь человеком :)");

@@ -29,11 +29,9 @@ public class DictionaryLatin extends Dictionary<String, String>{
 
 
     private boolean checkEntryRules(String wordTested) throws IllegalArgumentException{
-        if (wordTested.length() < 5 && !wordTested.isEmpty()){
-            String pattern = "[a-zA-Z]+$";
-            if (Pattern.matches(pattern, wordTested)){
-                return true;
-            }
+        String pattern = "^[a-zA-Z]{4}$";
+        if (Pattern.matches(pattern, wordTested)){
+            return true;
         }
         throw new IllegalArgumentException("Введи слово по правилам, будь человеком :)");
     }
